@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href='/View/style.css' rel="stylesheet" type="text/css">
+    <title>My Web App</title>
+</head>
+<body>
+    <h1 id="headerH1">Spotify (Fake)</h1>
+
+    <!-- Input field for album title -->
+    <input type="text" id="albumTitle" placeholder="Enter album title">
+    <button id="getAlbumButton">Get Album</button>
+
+    <!-- Div to display the album details -->
+    <div id="albumDetails"></div>
+
+    <script>
+        // JavaScript to handle button click and fetch album details
+        document.getElementById('getAlbumButton').addEventListener('click', async () => {
+            const title = document.getElementById('albumTitle').value; // Get the album title from input
+            const albumDetailsDiv = document.getElementById('albumDetails'); // Div to display the result
+
+            try {
+                // Make a POST request to the getAlbum route
+                const title = document.getElementById('albumTitle').value;
+                const response = await fetch(`/albums/getAlbum/${title}`);
+
+
+                if (!response.ok) {
+                    throw new Error('Error');
+                }
+
+                const data = await response.json(); // Parse the JSON response
+                albumDetailsDiv.innerHTML = `
+                    <h2>Album Details</h2>
+                    <p><strong>Title:</strong> ${data.album.title}</p>
+                    <p><strong>Artist:</strong> ${data.album.artist.name}</p>
+                    <p><strong>Release Date:</strong> ${new Date(data.album.releaseDate).toDateString()}</p>
+                    <p><strong>Songs:</strong></p>
+                    <ul>
+                        ${data.album.songs.map(song => `<li>${song.title}</li>`).join('')}
+                    </ul>
+                `;
+            } catch (error) {
+                albumDetailsDiv.innerHTML = `<p style="color: red;">${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
