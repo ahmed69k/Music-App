@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const albumSchema = require('../Model/albumSchema')
 const artistSchema = require('../Model/artistSchema')
 
+//CRUD comeplete
+
 const albumController = {
     create: async(req,res) => {
         try{
