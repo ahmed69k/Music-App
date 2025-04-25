@@ -1,13 +1,19 @@
 const mongoose = require('mongoose')
 const albumSchema = require('../Model/albumSchema')
+const artistSchema = require('../Model/artistSchema')
 
 const albumController = {
     create: async(req,res) => {
         try{
             const{title, artist, releaseDate, songs} = req.body
-            const newAlbum = new album({
+            const artistDoc = await artistSchema.findOne({name:artist})
+            if(!artistDoc){
+                return res.status(500).json({message: "Artist Not Found!", artistDoc})
+            }
+            const artistId = artistDoc._id
+            const newAlbum = new albumSchema({
                 title,
-                artist,
+                artist:artistId,
                 releaseDate,
                 songs
             })
@@ -36,6 +42,43 @@ const albumController = {
             return res.status(500).json({
                 message: "Server Error :("
             });
+        }
+    },
+    delete: async (req, res) => {
+        try{
+            const title = req.body.title
+            const album = await albumSchema.findOne({title: title})
+            if(!album){
+                return res.status(500).json({message: "Album not found!"})
+            }
+            album.delete()
+            return res.status(200).json({message: "Album deleted successfully!"})
+        }
+        catch(e){
+            console.log(e)
+            return res.status(500).json({
+                message: "Server Error!"
+            })
+        }
+    },
+    update: async(req,res) => {
+        const title = req.body.title
+        const {newTitle, newArtist, newReleaseDate, newSongs} = req.body
+        const album = await albumSchema.findOne({title:title})
+        if(!album){
+            return res.status(500).json({message: "Could not find album!"})
+        }
+        if(newTitle){
+            album.title = newTitle;
+        }
+        if(newAritst){
+            album.artist = newArtist
+        }
+        if(newReleaseDate){
+            album.releaseDate = newReleaseDate
+        }
+        if(songs){
+            album.songs = newSongs
         }
     }
 }
