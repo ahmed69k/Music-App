@@ -46,14 +46,28 @@ const albumController = {
             });
         }
     },
+    getAlbums: async(req,res) => {
+        try{ 
+            const albums = await albumSchema.find().populate('artist','name').populate('songs','title')
+            if(!albums){
+                return res.status(500).json({message: "No albums found!"})
+            }
+            return res.status(200).json({albums})
+        }
+        catch(e){
+            console.log(e)
+            return res.status(500).json({message: "Server Error!"})
+        }
+
+    },
     delete: async (req, res) => {
         try{
-            const title = req.body.title
-            const album = await albumSchema.findOne({title: title})
+            const title = req.params.title
+            const album = await albumSchema.findOneAndDelete({title: title})
             if(!album){
                 return res.status(500).json({message: "Album not found!"})
             }
-            album.delete()
+            
             return res.status(200).json({message: "Album deleted successfully!"})
         }
         catch(e){
@@ -64,7 +78,8 @@ const albumController = {
         }
     },
     update: async(req,res) => {
-        const title = req.body.title
+        try{
+            const title = req.params.title
         const {newTitle, newArtist, newReleaseDate, newSongs} = req.body
         const album = await albumSchema.findOne({title:title})
         if(!album){
@@ -73,14 +88,20 @@ const albumController = {
         if(newTitle){
             album.title = newTitle;
         }
-        if(newAritst){
+        if(newArtist){
             album.artist = newArtist
         }
         if(newReleaseDate){
             album.releaseDate = newReleaseDate
         }
-        if(songs){
+        if(newSongs){
             album.songs = newSongs
+        }
+        return res.status(200).json({message: "Albm Updated Successfully!", album})
+        }
+        catch(e){
+            console.log(e)
+            return res.status(500).json({message: "Server Error!"})
         }
     }
 }

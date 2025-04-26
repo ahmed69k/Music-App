@@ -12,11 +12,15 @@ const songController = {
     create: async (req,res) => {
         try{
             const {title,artist,album, length} = req.body
+            const artistDoc = await artistSchema.findOne({name:artist})
+            const albumDoc = await albumSchema.findOne({title: album})
+            const artistId = artistDoc._id
+            const albumId = albumDoc._id
             const newSong = 
             new songSchema({
                 title,
-                artist,
-                album,
+                artist:artistId,
+                album:albumId,
                 length
             })
             await newSong.save()

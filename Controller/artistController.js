@@ -7,7 +7,7 @@ const artistController = {
     create: async(req,res) => {
         try{
             const {name,profilePicture,description} = req.body
-            const newArtist = new Artist({
+            const newArtist = new artistSchema({
                 name,
                 profilePicture,
                 description
