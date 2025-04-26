@@ -1,8 +1,48 @@
 <!DOCTYPE html>
 <head>
-    <link href="style.css" rel = "stylesheet">
+    <link href="style.css" rel="stylesheet">
     <title> My Music App </title> 
 </head>
-<body> 
-    <h1 id="titlelowk"> </h1>
+<body id="bodylowk"> 
+    <div id="div1">
+    <h1 id="titlelowk"> Fake Spotify </h1>
+    <p>Under Construction 🥀</p>
+</div>
+
+    <button id="fetchArtistsBtn">Show Artists 🎵</button>
+    <div id="artistsBox" style=" padding: 20px; margin-top: 10px;">
+        <!-- Artists will pop up here -->
+    </div>
+
+    <script>
+      document.getElementById('fetchArtistsBtn').addEventListener('click', async () => {
+          try {
+              const res = await fetch('http://localhost:3000/artists/'); 
+              const artists = await res.json()
+
+              const artistsBox = document.getElementById('artistsBox');
+              artistsBox.innerHTML = ''; // Clear it first
+
+              if (artists.length === 0) {
+                  artistsBox.innerHTML = '<p>No artists found 💔.</p>';
+                  return;
+              }
+
+              artists.forEach(artist => {
+                  const artistDiv = document.createElement('div');
+                  artistDiv.style.marginBottom = '15px';
+                  artistDiv.innerHTML = `
+                      <h3>${artist.name}</h3>
+                      <p>${artist.description || 'No description 🥀'}</p>
+                      ${artist.profilePicture ? `<img src="${artist.profilePicture}" alt="${artist.name}" width="100"/>` : ''}
+                  `;
+                  artistsBox.appendChild(artistDiv);
+              });
+
+          } catch (error) {
+              console.log(error);
+              document.getElementById('artistsBox').innerHTML = '<p>Error fetching artists 💔.</p>';
+          }
+      });
+    </script>
 </body>

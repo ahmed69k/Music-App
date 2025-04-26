@@ -4,10 +4,12 @@ const mongoose = require('mongoose')
 const songRoute = require('./Routes/songRoute')
 const artistRoute = require('./Routes/artistRoute')
 const albumRoute = require('./Routes/albumRoute')
+const cors = require('cors')
 
 const app = express()
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors())
 
 const db_url = `${process.env.DBURL}/${process.env.DBNAME}`;
 mongoose
