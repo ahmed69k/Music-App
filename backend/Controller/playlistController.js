@@ -11,7 +11,7 @@ const User = require('../Model/userSchema.js')
 const playlistController = {
     create: async(req,res) => {
         try{
-            const userId = req.user._id
+            const userId = req.user.userId
             if(!userId){
                 return res.status(404).json({message: "User not found. Are you logged in?"})
             }
@@ -47,8 +47,12 @@ const playlistController = {
     },
     getPlaylists: async(req,res) => {
         try{
-            const userId = req.user._id;
-            const playlists = await playlistSchema.findAll({})
+            const userId = req.user.userId;
+            const playlists = await playlistSchema.findOne({creator: userId})
+            if(!playlists){
+                return res.status(404).json({message: "No playlists found. Did you create any?"})
+            }
+            return res.status(200).json(playlists)
         }
         catch(e){
             console.log(e)

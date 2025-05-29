@@ -10,7 +10,7 @@ const playlistSchema = mongoose.Schema({
     songs: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Song',
-        required: true
+        required: false
     }],
     createdAt: {
         type: Date,
