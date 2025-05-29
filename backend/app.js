@@ -13,7 +13,7 @@ app.use(cors())
 
 const db_url = `${process.env.DBURL}/${process.env.DBNAME}`;
 mongoose
-.connect('mongodb://127.0.0.1:27017/MusicAppDB')
+.connect(process.env.DBURL)
 .then(() => {
     console.log('Connected to MongoDB');
 })
@@ -29,6 +29,6 @@ app.use('/albums/', albumRoute)
 app.get('/', (req, res) => {
     res.sendFile(__dirname+'/View/index.html')
 });
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT || 3000, () => {
     console.log('Server is running on port ' + process.env.PORT);
 })

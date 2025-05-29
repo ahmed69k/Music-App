@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const song = require('./songSchema')
+const Song = require('./songSchema.js')
+const User = require('./userSchema.js')
 
 const playlistSchema = mongoose.Schema({
     name: {
@@ -18,6 +19,11 @@ const playlistSchema = mongoose.Schema({
     picture: {
         type: String,
         required: false
+    },
+    creator:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        
     }
 })
 

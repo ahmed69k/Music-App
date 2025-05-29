@@ -3,14 +3,14 @@ const Artist = require('./artistSchema')
 const Album = require('./albumSchema')
 
 const songSchema = mongoose.Schema({
-    title:{
+    title: {
         type: String,
         required: true
     },
     artist: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Artist',
-        required: false
+        required: true
     },
     album: {
         type: mongoose.Schema.Types.ObjectId,
